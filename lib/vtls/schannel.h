@@ -93,12 +93,19 @@ void Curl_schannel_cleanup(void);
 size_t Curl_schannel_version(char *buffer, size_t size);
 
 CURLcode Curl_schannel_random(unsigned char *entropy, size_t length);
+void Curl_schannel_sha256sum(unsigned char *tmp, /* input */
+                           size_t tmplen,
+                           unsigned char *sha256sum, /* output */
+                           size_t sha256len);
 
 /* Set the API backend definition to Schannel */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_SCHANNEL
 
 /* this backend supports CURLOPT_CERTINFO */
 #define have_curlssl_certinfo 1
+
+/* this backend supports CURLOPT_PINNEDPUBLICKEY */
+#define have_curlssl_pinnedpubkey 1
 
 /* API setup for Schannel */
 #define curlssl_init Curl_schannel_init
@@ -116,6 +123,7 @@ CURLcode Curl_schannel_random(unsigned char *entropy, size_t length);
 #define curlssl_check_cxn(x) ((void)x, -1)
 #define curlssl_data_pending Curl_schannel_data_pending
 #define curlssl_random(x,y,z) ((void)x, Curl_schannel_random(y,z))
+#define curlssl_sha256sum(a,b,c,d) Curl_schannel_sha256sum(a,b,c,d)
 
 #endif /* USE_SCHANNEL */
 #endif /* HEADER_CURL_SCHANNEL_H */
